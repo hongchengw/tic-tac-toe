@@ -3,11 +3,11 @@
 class TicTacToe {
     // properties
     private readonly board: (string | null)[][] = [ 
-        [null, null, null], // [0][0, 1, 2]
-        [null, null, null], // [1][0, 1, 2]
-        [null, null, null]  // [2][0, 1, 2]
+        ["X", "X", "X"], // [0][0, 1, 2]
+        ["X", "X", "X"], // [1][0, 1, 2]
+        ["X", "X", "X"]  // [2][0, 1, 2]
     ];
-    
+
     constructor() { 
         console.log("Board Initialized");
     } 
@@ -25,13 +25,17 @@ class TicTacToe {
     }
 
     public displayBoard(): void {
+        console.log("-------------");
         for (let i = 0; i < this.board.length; ++i) {
-            for (let j = 0; j < this.board.length; ++j) {
-                process.stdout.write("l")
-            }
+            process.stdout.write("| ");
+            for (const cell of this.board[i]?) {
+                const value = cell ?? " ";
+                process.stdout.write(value + " | ");
+            } 
+            process.stdout.write("\n");
+            console.log("-------------");
         }
     }
-
 } 
 
 function main(): void {

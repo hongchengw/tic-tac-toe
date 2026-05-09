@@ -26,9 +26,9 @@ class TicTacToe {
 
     public displayBoard(): void {
         console.log("-------------");
-        for (let i = 0; i < this.board.length; ++i) {
+        for (const row of this.board) {
             process.stdout.write("| ");
-            for (const cell of this.board[i]?) {
+            for (const cell of row) {
                 const value = cell ?? " ";
                 process.stdout.write(value + " | ");
             } 

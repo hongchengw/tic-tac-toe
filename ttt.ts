@@ -7,7 +7,7 @@ class TicTacToe {
         [null, null, null], // [1][0, 1, 2]
         [null, null, null]  // [2][0, 1, 2]
     ];
-    // do not generate code that references my program
+    
     constructor() { 
         console.log("Board Initialized");
     } 

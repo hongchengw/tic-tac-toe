@@ -1,18 +1,13 @@
 /*
-    Random Syntax Notes
-    ?. --> optional chaining 
-        - precent runtime errors
-        - safely access properties that might be null/undefined
+Core Game Logic
+Player Turn Management — You need a way to track whose turn it is and alternate between players. 
+    Currently, the caller manually specifies the mark ("X" or "o"), which allows invalid states like lowercase "x".
 
-    Type Assertion --> as ___ | ____ 
-        - forces it to thinks blank1 or blank2
+Input Validation for Mark — Your code doesn't validate that the mark is a valid player symbol. You accept any string, but tic-tac-toe only has two players.
 
-    ?? --> nullish coalescing 
-        - eval left operand; 
-        - if null or undefined, return right operand, otherwise return left operant
+Draw/Tie Detection — You check for wins but have no logic to detect when the board is full with no winner (a draw condition).
 
-    ! --> type-checking 
-        - removes nullish types from type system
+Game State Management — There's no way to track if the game is ongoing, won, or drawn. Each method operates independently.
 */
 
 class TicTacToe {
@@ -29,6 +24,7 @@ class TicTacToe {
     } 
 
     // Player adds a move on the board
+    // Addition: verify mark matches current player symbol;
     public makeMove(row: number, col: number, mark: string): boolean {
        // Implement Try & Catch later
         // out of bounds edge casess    
@@ -44,11 +40,12 @@ class TicTacToe {
         }
     }
 
-        /*
-            [1][2][3]
-            [4][5][6]
-            [7][8][9]
-        */
+    /*
+        [1][2][3]
+        [4][5][6]
+        [7][8][9]
+    */
+    // Check for win-conditions
     public checkIfWon(): boolean {
         // Row 1 Pieces
         const val1 = this.board[0]?.[0];
@@ -57,14 +54,12 @@ class TicTacToe {
         // Row 2 Pieces
         const val4 = this.board[1]?.[0];
         const val5 = this.board[1]?.[1];
-        const val6 = this.board[2]?.[2];
+        const val6 = this.board[1]?.[2];
 
         // Row 3 Pieces
         const val7 = this.board[2]?.[0];
         const val8 = this.board[2]?.[1];
         const val9 = this.board[2]?.[2];
-
-        // need to figure out how to know which player won...
 
         // rows
         if (val1 === val2 && val2 === val3) {
@@ -112,6 +107,7 @@ class TicTacToe {
 
 // Main
 function main(): void {
+    // Addition: Future Game Loop
     const newTTT = new TicTacToe(); 
     /*
         Start Game: Player 1 (x) & Player 2 (o)
@@ -121,7 +117,7 @@ function main(): void {
    // Player 2: boolean = false;    // Mark = "O"
    newTTT.makeMove(0, 1, "X");
    newTTT.displayBoard();
-   newTTT.makeMove(0, 2, "x");
+   newTTT.makeMove(0, 2, "X");
    newTTT.displayBoard();
    newTTT.makeMove(0, 0, "X");
    newTTT.displayBoard();

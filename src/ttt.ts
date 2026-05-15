@@ -10,18 +10,38 @@ Draw/Tie Detection — You check for wins but have no logic to detect when the b
 Game State Management — There's no way to track if the game is ongoing, won, or drawn. Each method operates independently.
 */
 
+/*
+    Conceptual Flow
+    GameManager tracks:
+    - currentPlayer (whose turn)
+    - gameState (waiting for players, ongoing, won, drawn)
+    - both player assignments (who chose X, who chose O)
+
+    When a player makes a move:
+        GameManager calls: tictactoe.makeMove(row, col, currentPlayer)
+        TicTacToe places the mark and returns true/false
+        GameManager checks if won/drawn, switches currentPlayer
+*/
+
+enum Player {
+    X = "X",
+    O = "O",
+}
+
 class TicTacToe {
     // Properties
     private readonly board: (string | null)[][] = [ 
-        [null, null, null], // [0][0, 1, 2]
-        [null, null, null], // [1][0, 1, 2]
-        [null, null, null]  // [2][0, 1, 2]
+        [null, null, null], // [0][0, 1, 2] -- [0][0] [0][1] [0][2]
+        [null, null, null], // [1][0, 1, 2] -- [1][0] [1][1] [1][2]
+        [null, null, null]  // [2][0, 1, 2] -- [2][0] [2][1] [2][2]
     ];
 
     // Constructor
     constructor() { 
         console.log("Board Initialized");
     } 
+
+    // Public Methods 
 
     // Player adds a move on the board
     // Addition: verify mark matches current player symbol;
@@ -41,52 +61,33 @@ class TicTacToe {
     }
 
     /*
-        [1][2][3]
-        [4][5][6]
-        [7][8][9]
+        Reference: 
+                    [1][2][3]
+                    [4][5][6]
+                    [7][8][9]
     */
     // Check for win-conditions
     public checkIfWon(): boolean {
-        // Row 1 Pieces
-        const val1 = this.board[0]?.[0];
-        const val2 = this.board[0]?.[1];
-        const val3 = this.board[0]?.[2];
-        // Row 2 Pieces
-        const val4 = this.board[1]?.[0];
-        const val5 = this.board[1]?.[1];
-        const val6 = this.board[1]?.[2];
+        return this.checkRows() === true || 
+                this.checkCols() === true || 
+                this.checkDiagonals() === true;
+    }
 
-        // Row 3 Pieces
-        const val7 = this.board[2]?.[0];
-        const val8 = this.board[2]?.[1];
-        const val9 = this.board[2]?.[2];
+    public checkIfDraw(): boolean {
+        // Check if board is completely full
+        let fullBoard: boolean = true;
 
-        // rows
-        if (val1 === val2 && val2 === val3) {
-            return true;
-        } else if (val4 === val5 && val5  === val6) {
-            return true;
-        } else if (val7 === val8 && val8  === val9) {
-            return true;
-
-        // Columns
-        } else if (val1 === val4 && val4  === val9) {
-            return true;
-        } else if (val2 === val5 && val5  === val8) {
-            return true;
-        } else if (val3 === val6 && val6  === val9) {
-            return true;
-
-        // Diagonals
-        } else if (val1 === val5 && val5  === val9) {
-            return true;
-        } else if (val3 === val5 && val5  === val7) {
-            return true;
-        
-        // No win
-        } else {
-            return false;
+        for (const row of this.board) {
+            for (const cell of row) {
+                if (cell === null ||
+                     cell === undefined) fullBoard = false;
+            }
         }
+
+        // full board and no winner; draw concluded
+        if (fullBoard && this.checkIfWon() === false) return true;
+
+        return false;
     }
 
     // Displays TicTacToe board in 3x3 Pattern.
@@ -102,27 +103,89 @@ class TicTacToe {
             console.log("-------------");
         }
     } 
-} 
 
+    // Private Methods (Helper Functions);
+
+    // Check rows for win condition
+    private checkRows(): boolean {
+        for (const row of this.board) {
+            const allX = row.every((cell) => cell === "X");
+            const allO = row.every((cell) => cell === "O");
+
+            if ( allX || allO ) return true;
+        }
+        return false;
+    }
+
+    // Check columns for win condition
+    private checkCols(): boolean {
+        for(let col = 0; col < this.board.length; ++col) {
+            const val1: string | null = this.board[0]?.[col] as string | null;
+            const val2: string | null = this.board[1]?.[col] as string | null;
+            const val3: string | null = this.board[2]?.[col] as string | null;
+            const allX = val1 === "X" && val2 === "X" && val3 === "X";
+            const allO = val1 === "O" && val2 === "O" && val3 === "O";
+            if ( allX || allO ) return true;
+        }
+        return false; 
+    }
+
+    // Check diagonals for win condition
+    private checkDiagonals(): boolean {
+        // Hardcoded Values
+        const val1: string | null = this.board[0]?.[0] as string | null;
+        const val2: string | null = this.board[1]?.[1] as string | null;
+        const val3: string | null = this.board[2]?.[2] as string | null;
+        const val4: string | null = this.board[2]?.[0] as string | null;
+        const val5: string | null = this.board[0]?.[2] as string | null;
+
+        // Setting up arrays for every() method checking
+        const rightDiagonal = [val1, val2, val3];
+        const leftDiagonal = [val5, val2, val4];
+
+        // Checking right-sliced diagonal
+        const rightDiaAllX = rightDiagonal.every((cell) => cell === "X");
+        const rightDiaAllO = rightDiagonal.every((cell) => cell === "O");
+        if (rightDiaAllX || rightDiaAllO) return true;
+
+        // Checking left-sliced diagonal
+        const leftDiaAllX = leftDiagonal.every((cell) => cell === "X");
+        const leftDiaAllO = leftDiagonal.every((cell) => cell === "O");
+        if (leftDiaAllX || leftDiaAllO) return true;
+
+        return false; 
+    }
+}
 
 // Main
 function main(): void {
-    // Addition: Future Game Loop
-    const newTTT = new TicTacToe(); 
     /*
         Start Game: Player 1 (x) & Player 2 (o)
         Worry about scalability later, hardcode player 1 to be X and player 2 to be O
     */
-   // Player 1: boolean = true;     // Mark = "X"
-   // Player 2: boolean = false;    // Mark = "O"
-   newTTT.makeMove(0, 1, "X");
-   newTTT.displayBoard();
-   newTTT.makeMove(0, 2, "X");
-   newTTT.displayBoard();
-   newTTT.makeMove(0, 0, "X");
-   newTTT.displayBoard();
-   let winner: boolean = newTTT.checkIfWon();
-   console.log(winner);
+    // Player 1: boolean = true;     // Mark = "X"
+    // Player 2: boolean = false;    // Mark = "O"
+    const ttt = new TicTacToe();
+    
+    // Fill board with a draw scenario (no winner)
+    ttt.makeMove(0, 0, "X");
+    ttt.makeMove(0, 1, "O");
+    ttt.makeMove(0, 2, "X");
+    ttt.makeMove(1, 0, "X");
+    ttt.makeMove(1, 1, "O");
+    ttt.makeMove(1, 2, "O");
+    ttt.makeMove(2, 0, "O");
+    ttt.makeMove(2, 1, "X");
+    ttt.makeMove(2, 2, "X");
+    
+    ttt.displayBoard();
+    
+    const isDraw = ttt.checkIfDraw();
+    const isWon = ttt.checkIfWon();
+    
+    console.log(`Is Draw: ${isDraw}`);
+    console.log(`Is Won: ${isWon}`);
+    console.log(`Test ${isDraw && !isWon ? "PASSED ✓" : "FAILED ✗"}`);
 }
 
 main();

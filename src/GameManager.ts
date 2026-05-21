@@ -21,7 +21,7 @@ export class GameManager {
         });
     }
 
-    // Methods
+    // Continous game until WON or DRAW state achieved
     public async start(): Promise<void> {
         while (this.gameStatus !== GameStatus.WON && this.gameStatus !== GameStatus.DRAW) {
             await this.playRound();
@@ -29,6 +29,7 @@ export class GameManager {
         this.endGame();
     }
 
+    // Players turn to make a valid move
     public async playRound(): Promise<void> {
         let moveSuccessful: boolean = false; 
 
@@ -69,10 +70,12 @@ export class GameManager {
         this.switchPlayer();
     }
 
+    // Return current player: X or O
     public getCurrentPlayer(): Player{
         return this.currentPlayer;
     }
 
+    // Switch players 
     public switchPlayer(): void {
         if (this.currentPlayer === Player.X) {
             this.currentPlayer = this.player2
@@ -81,6 +84,7 @@ export class GameManager {
         }
     }
 
+    // End message stating who won or draw
     public endGame(): void {
         if (this.gameStatus === GameStatus.WON) {
             console.log(`The winner is Player ${this.currentPlayer}!`);
@@ -89,6 +93,7 @@ export class GameManager {
         }
     }
 
+    // Reset game
     public reset(): void {
         this.board.reset();
         this.gameStatus = GameStatus.IN_PROGRESS;
@@ -103,6 +108,4 @@ export class GameManager {
             })
         });
     }
-
-
 } // Game Manager Class

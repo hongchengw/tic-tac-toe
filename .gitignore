@@ -1,5 +1,3 @@
 /node_modules
-package-lock.json
-package.json
-src/ttt.js
 product_specs.md
+/dest

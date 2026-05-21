@@ -1,5 +1,3 @@
-import { Player } from "./types/enums";
-
 export class TicTacToe {
     // Properties
     private readonly board: (string | null)[][] = [ 

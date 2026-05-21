@@ -1,34 +1,6 @@
-/*
-Core Game Logic
-Player Turn Management — You need a way to track whose turn it is and alternate between players. 
-    Currently, the caller manually specifies the mark ("X" or "o"), which allows invalid states like lowercase "x".
+import { Player } from "./types/enums";
 
-Input Validation for Mark — Your code doesn't validate that the mark is a valid player symbol. You accept any string, but tic-tac-toe only has two players.
-
-Draw/Tie Detection — You check for wins but have no logic to detect when the board is full with no winner (a draw condition).
-
-Game State Management — There's no way to track if the game is ongoing, won, or drawn. Each method operates independently.
-*/
-
-/*
-    Conceptual Flow
-    GameManager tracks:
-    - currentPlayer (whose turn)
-    - gameState (waiting for players, ongoing, won, drawn)
-    - both player assignments (who chose X, who chose O)
-
-    When a player makes a move:
-        GameManager calls: tictactoe.makeMove(row, col, currentPlayer)
-        TicTacToe places the mark and returns true/false
-        GameManager checks if won/drawn, switches currentPlayer
-*/
-
-enum Player {
-    X = "X",
-    O = "O",
-}
-
-class TicTacToe {
+export class TicTacToe {
     // Properties
     private readonly board: (string | null)[][] = [ 
         [null, null, null], // [0][0, 1, 2] -- [0][0] [0][1] [0][2]
@@ -155,37 +127,4 @@ class TicTacToe {
 
         return false; 
     }
-}
-
-// Main
-function main(): void {
-    /*
-        Start Game: Player 1 (x) & Player 2 (o)
-        Worry about scalability later, hardcode player 1 to be X and player 2 to be O
-    */
-    // Player 1: boolean = true;     // Mark = "X"
-    // Player 2: boolean = false;    // Mark = "O"
-    const ttt = new TicTacToe();
-    
-    // Fill board with a draw scenario (no winner)
-    ttt.makeMove(0, 0, "X");
-    ttt.makeMove(0, 1, "O");
-    ttt.makeMove(0, 2, "X");
-    ttt.makeMove(1, 0, "X");
-    ttt.makeMove(1, 1, "O");
-    ttt.makeMove(1, 2, "O");
-    ttt.makeMove(2, 0, "O");
-    ttt.makeMove(2, 1, "X");
-    ttt.makeMove(2, 2, "X");
-    
-    ttt.displayBoard();
-    
-    const isDraw = ttt.checkIfDraw();
-    const isWon = ttt.checkIfWon();
-    
-    console.log(`Is Draw: ${isDraw}`);
-    console.log(`Is Won: ${isWon}`);
-    console.log(`Test ${isDraw && !isWon ? "PASSED ✓" : "FAILED ✗"}`);
-}
-
-main();
+} // TicTacToe class

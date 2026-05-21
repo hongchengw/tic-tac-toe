@@ -4,9 +4,7 @@ export enum Player {
 }
 
 export enum GameStatus {
-    INITIALIZED = "initialized",
     IN_PROGRESS = "in_progress",
     WON = "won",
     DRAW = "draw",
-    ABANDONED = "abandoned",
 }

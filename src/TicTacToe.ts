@@ -9,9 +9,7 @@ export class TicTacToe {
     // Public Methods 
 
     // Player adds a move on the board
-    // Addition: verify mark matches current player symbol;
     public makeMove(row: number, col: number, mark: string): boolean {
-       // Implement Try & Catch later
         // out of bounds edge casess    
         if (row < 0 || row > 2 || col < 0 || col > 2) return false;
         const value = this.board[row]?.[col];
@@ -37,6 +35,7 @@ export class TicTacToe {
                 this.checkDiagonals() === true;
     }
 
+    // Check for draw state
     public checkIfDraw(): boolean {
         // check every row (its cells) is full & not null
         const isFull = this.board.every(row => row.every(cell => cell !== null));
@@ -57,6 +56,7 @@ export class TicTacToe {
         }
     } 
 
+    // Reset entire board to be null
     public reset(): void {
         for (let i = 0; i < 3; i++) {
             this.board[i]!.fill(null);

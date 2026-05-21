@@ -6,11 +6,6 @@ export class TicTacToe {
         [null, null, null]  // [2][0, 1, 2] -- [2][0] [2][1] [2][2]
     ];
 
-    // Constructor
-    constructor() { 
-        console.log("Board Initialized");
-    } 
-
     // Public Methods 
 
     // Player adds a move on the board
@@ -25,7 +20,6 @@ export class TicTacToe {
             this.board[row]![col] = mark; 
             return true; 
         } else { 
-            console.log("Invalid Positon"); 
             return false; 
         }
     }
@@ -44,20 +38,9 @@ export class TicTacToe {
     }
 
     public checkIfDraw(): boolean {
-        // Check if board is completely full
-        let fullBoard: boolean = true;
-
-        for (const row of this.board) {
-            for (const cell of row) {
-                if (cell === null ||
-                     cell === undefined) fullBoard = false;
-            }
-        }
-
-        // full board and no winner; draw concluded
-        if (fullBoard && this.checkIfWon() === false) return true;
-
-        return false;
+        // check every row (its cells) is full & not null
+        const isFull = this.board.every(row => row.every(cell => cell !== null));
+        return isFull && this.checkIfWon();
     }
 
     // Displays TicTacToe board in 3x3 Pattern.
@@ -73,6 +56,12 @@ export class TicTacToe {
             console.log("-------------");
         }
     } 
+
+    public reset(): void {
+        for (let i = 0; i < 3; i++) {
+            this.board[i]!.fill(null);
+        }
+    }
 
     // Private Methods (Helper Functions);
 

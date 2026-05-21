@@ -87,7 +87,12 @@ export class GameManager {
         } else if (this.gameStatus === GameStatus.DRAW) {
             console.log(`Game ended in a draw!`);
         }
-        this.rl.close();
+    }
+
+    public reset(): void {
+        this.board.reset();
+        this.gameStatus = GameStatus.IN_PROGRESS;
+        this.currentPlayer = this.player1;
     }
 
     // Helper Methods

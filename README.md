@@ -1,4 +1,4 @@
-# Console Tic Tac Toe Game
+# CLI Tic-Tac-Toe Game
 
 ## What It Does
 Brief overview of functionality:
